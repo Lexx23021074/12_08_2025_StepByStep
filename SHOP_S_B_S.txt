@@ -1,0 +1,411 @@
+1) в папці 12_08_2025_StepByStep відкриваємо термінал GitBash
+2) створюємо віртуальне середовище: python -m virtualenv .venv
+3) активуємо його: source .venv/Scripts/activate
+4) Встановлюємо: pip install Django django-crispy-forms crispy-bootstrap5 django-celery-beat celery redis Pillow
+
+0	Django: Основний фреймворк.
+0	django-crispy-forms, crispy-bootstrap5: Для легкого та красивого рендерингу форм з Bootstrap 5.
+0	django-celery-beat, celery, redis: Для асинхронних завдань (підписка на новини). Redis буде використовуватися як брокер повідомлень для Celery.
+0	Pillow: Для роботи з зображеннями в Django (наприклад, для завантаження зображень товарів).
+
+5) знаходячись в цій папці створюємо проект:a) django-admin startproject shop_SBS_12_08_25
+											b) django-admin startproject shop_SBS_12_08_25.(сьогодні Gemini каже що цей варіант гірший "РАВЛИК-ПАВЛИК!!!)
+6) йдемо по варанту а) переходимо в папу проекту: cd shop_SBS_12_08_25
+структура зараз така:
+12_08_2025_StepByStep/
+¦
++-- .venv/                   # Віртуальне середовище
+¦
+L-- shop_SBS_12_08_25/       # Папка нашого Django-проекту
+    +-- manage.py            # Утиліта командного рядка Django
+    L-- shop_SBS_12_08_25/   # Папка з основними налаштуваннями проекту
+        +-- __init__.py
+        +-- asgi.py
+        +-- settings.py      # Файл з налаштуваннями проекту
+        +-- urls.py          # Файл маршрутизації (URL-адрес)
+        L-- wsgi.py
+7) створюємо додаток shop: python manage.py startapp shop
+12_08_2025_StepByStep/
+¦
++-- .venv/                   
+L-- shop_SBS_12_08_25/       
+    +-- manage.py            
+    +-- shop/                <-- Наш новий додаток
+    ¦   +-- __init__.py
+    ¦   +-- admin.py
+    ¦   +-- apps.py
+    ¦   +-- migrations/
+    ¦   +-- models.py
+    ¦   +-- tests.py
+    ¦   L-- views.py
+    ¦
+    L-- shop_SBS_12_08_25/   
+        +-- __init__.py
+        +-- asgi.py
+        +-- settings.py      
+        +-- urls.py          
+        L-- wsgi.py
+8) трепер реєструємо його в shop_SBS_12_08_25/settings.py  
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    # власні додатки
+    'shop'
+9) — Створення URL-конфігурації застосунку
+Створюю в папці shop файл urls.py з таким вмістом:
+from django.urls import path
+from .views import home, 
+
+urlpatterns = [
+    path('', home)
+10) — Створення функцій відображення у views.py
+У файлі shop/views.py додаємо :
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse('<h1>THIS SHOP PAGE</h1>')
+11) Для перевірки запускаємо сервер:
+python manage.py runserver
+Якщо все зроблено правильно, ти побачиш повідомлення про успішний запуск сервера.
+Відкрий у своєму браузері адресу http://127.0.0.1:8000/
+Ти побачиш сторінку з великим написом THIS SHOP PAGE, який ми прописали у функції home
+12) створюємо першу міграцію для стоврення таблиць
+python manage.py migrate
+13) 
+Щоб отримати доступ до адмін-панелі Django, нам потрібно створити обліковий запис адміністратора
+Створення суперкористувача (superuser)
+Зупини сервер: Перш ніж запускати нову команду, тобі потрібно зупинити сервер, який зараз працює. 
+Для цього просто натисни комбінацію клавіш Ctrl + C у терміналі.
+Виконай команду: Переконайся, що ти знаходишся у кореневій папці проекту (shop_SBS_12_08_25) та віртуальне середовище активовано.
+Потім введи таку команду: python manage.py createsuperuser
+Логін admin
+Мейл  taras14@i.ua
+пароль: admin
+погоджуємо зміни і то що свариться на пароль
+14)
+Так, ти абсолютно правий! Першим кроком є створення файлу шаблону.
+
+Давай зробимо це покроково.
+
+11) Створення HTML-шаблону
+Створи папку templates. Вона має знаходитися всередині папки нашого додатку shop.
+
+Шлях: shop_SBS_12_08_25/shop/templates/
+
+Створи папку shop всередині templates. Це є найкращою практикою, щоб уникнути конфліктів назв файлів, якщо у тебе буде декілька додатків.
+
+Шлях: shop_SBS_12_08_25/shop/templates/shop/
+
+Створи файл home.html всередині цієї останньої папки.
+
+Шлях: shop_SBS_12_08_25/shop/templates/shop/home.html
+
+Тепер наша структура папок виглядає так:
+
+...
+L-- shop/
+    +-- migrations/
+    +-- templates/
+    ¦   L-- shop/
+    ¦       L-- home.html
+    +-- __init__.py
+    +-- admin.py
+    +-- apps.py
+    +-- models.py
+    +-- tests.py
+    +-- urls.py
+    L-- views.py
+15)
+Оновлення views.py
+Щоб Django почав відображати цей шаблон, нам потрібно змінити наш файл shop/views.py. Ми замінимо тимчасову відповідь HttpResponse на функцію render, 
+яка буде відображати наш новий HTML-файл.
+Зміни в файлі shop/views.py:
+Відкрий файл shop/views.py і заміни його вміст на наступний код:
+Python
+from django.shortcuts import render
+def home(request):
+    return render(request, 'shop/home.html')
+ Цей рядок вказує Django, що він має завантажити та відобразити шаблон home.html з папки shop.
+   Django автоматично шукатиме цей файл у папці templates нашого додатку. 
+16)
+почнемо наповнювати шаблон home.html крок за кроком.
+Базова HTML-структура
+Спочатку створимо базову розмітку. Відкрий файл shop/templates/shop/home.html і додай наступний код:
+HTML
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Головна сторінка</title>
+</head>
+<body>
+    <h1>Вітаю на головній сторінці інтернет-магазину!</h1>
+</body>
+</html>
+<!DOCTYPE html>: Оголошення типу документа.
+
+<html lang="uk">: Корінь HTML-документа, що вказує на українську мову.
+
+<head>: Містить метаінформацію, яка не відображається на сторінці (кодування, адаптивність, заголовок).
+
+<title>: Текст, який відображається на вкладці браузера.
+
+<body>: Вся видима частина сторінки. 
+17)Створення базового шаблону
+Щоб не дублювати код (наприклад, навігаційну панель або футер) на кожній сторінці, ми створимо базовий шаблон base.html.
+Тобто- куди ми би не переходили, в нас постійно буде одинаков сторінка
+	Створи файл base.html у папці shop/templates/shop/.
+	Додай до нього наступний код:
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мій магазин{% endblock %}</title>
+</head>
+<body>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
+--- {% block title %} та {% block content %}: Це спеціальні теги Django. Вони означають, що в ці місця можна буде вставляти вміст з інших шаблонів, які успадковують цей базовий.
+18)
+Використання базового шаблону в home.html
+змінімо наш файл home.html, щоб він успадковував base.html.
+
+Відкрий shop/templates/shop/home.html і заміни його вміст на:
+{% extends 'shop/base.html' %}
+
+{% block title %}Головна сторінка{% endblock %}
+
+{% block content %}
+    <h1>Вітаю на головній сторінці інтернет-магазину!</h1>
+{% endblock %}
+----
+{% extends 'shop/base.html' %}: Цей рядок вказує, що цей шаблон успадковує все від base.html.
+
+{% block ... %}: Тепер ми визначаємо, який вміст буде вставлено у відповідні блоки з base.html.
+19)
+Додавання навігаційної панелі в base.html
+Відкрий файл shop/templates/shop/base.html і додай наступний код у <body> одразу після відкриваючого тегу <body>:
+
+HTML
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Мій магазин</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Головна <span class="sr-only">(поточна)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Кошик</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+</body>
+Ми використали базову розмітку Bootstrap 4 для створення навігаційної панелі. Вона буде добре виглядати на будь-яких пристроях.
+
+Що ми тут зробили?
+<header>: Семантичний тег, який позначає шапку сторінки.
+
+<nav>: Контейнер для навігаційних посилань. Класи navbar, navbar-expand-lg та інші — це класи Bootstrap, які стилізують навігацію.
+
+<a class="navbar-brand">: Наш логотип або назва магазину, що веде на головну сторінку.
+
+<button class="navbar-toggler">: Кнопка для мобільних пристроїв, яка розкриває меню.
+
+<ul> та <li> з класом nav-item: Створення списку посилань на різні сторінки (Головна, Каталог, Кошик).
+
+Після збереження файлу, якщо ти запустиш сервер (python manage.py runserver) і оновиш сторінку в браузері, ти побачиш вже більш структуровану сторінку з навігаційною панеллю зверху.
+20
+ Підключення Bootstrap та JavaScript
+Відкрий файл shop/templates/shop/base.html і додай наступні рядки в секцію <head>:
+
+HTML
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мій магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+Це підключить файл стилів Bootstrap. Наша навігаційна панель тепер буде мати гарний вигляд.
+
+Також, для того, щоб кнопка розгортання на мобільних пристроях працювала, нам потрібні скрипти. Додай їх перед закриваючим тегом </body>:
+
+HTML
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+Пояснення:
+
+Bootstrap CSS: Файл стилів, який робить наші елементи (наприклад, навігаційну панель) красивими.
+
+jQuery, Popper.js, Bootstrap JS: Ці JavaScript-файли потрібні для інтерактивних елементів Bootstrap, таких як випадаючі меню та кнопки.
+21
+ Додавання футера в base.html
+Відкрий файл shop/templates/shop/base.html і додай наступний код одразу після закриваючого тегу </main>:
+
+HTML
+
+        </main>
+
+        <footer class="bg-light text-center text-lg-start mt-auto">
+            <div class="container p-4">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Мій магазин</h5>
+                        <p>
+                            Ми пропонуємо широкий асортимент товарів високої якості.
+                            Завітайте до нас, щоб знайти те, що вам потрібно!
+                        </p>
+                    </div>
+                    <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Контакти</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="#" class="text-dark">Наші контакти</a></li>
+                            <li><a href="#" class="text-dark">Про нас</a></li>
+                            <li><a href="#" class="text-dark">Доставка та оплата</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2025 Copyright:
+                <a class="text-dark" href="/">Мій магазин</a>
+            </div>
+        </footer>
+    
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>
+Пояснення
+<footer class="bg-light ...">: Семантичний тег, який вказує на нижню частину сторінки. Класи Bootstrap bg-light (світло-сірий фон), text-center, mt-auto допомагають його стилізувати.
+
+<div class="container">: Контейнер Bootstrap, який центрує контент та надає йому відступи.
+
+<div class="row">: Створює рядок, всередині якого ми можемо розміщувати стовпці.
+
+<div class="col-lg-6 ...">: Стовпці Bootstrap, які ділять простір на дві частини, щоб розмістити інформацію про магазин та контакти.
+
+Збережи файл і онови сторінку в браузері. Ти побачиш вже повноцінно оформлену сторінку з навігаційною панеллю та футером.
+
+22
+давай відразу поправимо верхню частину : мій магазин(Добавити лого) | полее(кнопка) каталог  |  поле пошуку товарів |  поле(кнопка) "порівняння( або картинка )| " поле(кнопка) "улюблене"
+( або картинка сердечко )" | " поле(кнопка) "корзина"( або картинка кошик )" | " поле(кнопка) "особистий кабінет"( або картинка дяпчик )"
+Чудова ідея! Це зробить нашу навігаційну панель більш функціональною та професійною. Давайте оновимо наш файл base.html, щоб додати всі ці елементи.
+
+Оновлення base.html
+Відкрий файл shop/templates/shop/base.html і внеси наступні зміни.
+
+1. Додавання іконок Font Awesome
+Щоб використовувати іконки (сердечко, кошик, чоловічка), нам потрібно підключити бібліотеку Font Awesome. Додай цей рядок у секцію <head> разом з посиланням на Bootstrap CSS.
+
+HTML
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мій магазин{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+2. Оновлення навігаційної панелі
+Заміни весь блок <nav> на наступний. Цей код включає всі елементи, які ти запропонував, і використовує класи Bootstrap для їх розташування та стилізації.
+
+HTML
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">
+                <img src="#" alt="Логотип" width="30" height="30" class="d-inline-block align-top">
+                Мій магазин
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Каталог</a>
+                    </li>
+                </ul>
+
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Пошук товарів" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
+                </form>
+
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Порівняння">
+                            <i class="fas fa-balance-scale"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Улюблене">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Кошик">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Особистий кабінет">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    </body>
+Пояснення змін:
+Логотип: Ми додали тег <img> з атрибутом src="#" як заповнювач для майбутнього логотипа.
+
+Каталог: Цей елемент залишається як окреме посилання.
+
+Пошук: Ми створили Bootstrap-форму (form class="form-inline") з полем для введення тексту (<input type="search">) та кнопкою для пошуку.
+
+Іконки: Для "Порівняння", "Улюблене", "Кошик" та "Особистий кабінет" ми використали іконки з Font Awesome. Теги <i class="..."> відображають іконки, а атрибут title додає підказку при наведенні миші.
+
+Збережи файл і онови сторінку в браузері. Тепер твоя навігаційна панель має бути повністю оновлена і містити всі необхідні елементи.
