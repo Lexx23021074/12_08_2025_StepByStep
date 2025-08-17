@@ -1,8 +1,9 @@
-from django.urls import path # Імпортуємо функцію path для визначення маршрутів
-from .views import home # Імпортуємо функцію home з файлу views.py в поточному каталозі
+from django.urls import path
 from . import views
 
+app_name = 'shop' # Додайте цей рядок
 
-urlpatterns = [             # Список, що містить усі маршрути нашого додатку
-    path('', home)    # path('') означає, що цей маршрут буде відповідати на головну сторінку додатку. Коли користувач зайде на цю сторінку, Django викличе функцію home.
+urlpatterns = [
+    path('', views.home, name='home'),
+    path('products/', views.product_list, name='product_list'),
 ]

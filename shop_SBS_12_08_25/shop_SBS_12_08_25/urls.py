@@ -14,10 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin # Імпортуємо модуль для доступу до панелі адміністратора
-from django.urls import path, include # Імпортуємо path для маршрутів і include для включення маршрутів інших додатків
+from django.contrib import admin
+from django.urls import path, include
 
-urlpatterns = [ # Список, що містить усі маршрути нашого проекту
-    path('admin/', admin.site.urls), # path('admin/') означає, що запити на URL-адресу '/admin/' будуть оброблятися панеллю адміністратора Django
-    path('', include('shop.urls')), # path('') означає, що запити на головну сторінку будуть перенаправлені до файлу urls.py нашого додатку shop
+app_name = 'shop'  # Додайте цей рядок
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('shop.urls', namespace='shop')),
 ]

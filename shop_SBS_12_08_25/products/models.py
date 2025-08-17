@@ -70,16 +70,10 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        # сортування продуктів за назвою.
         ordering = ('name',)
-
-        # index_together створює складений індекс з полів 'id' та 'slug'.
-        # Це прискорює запити, які використовують обидва поля.
-        # index_together = (('id', 'slug'),)
-        # Замість index_together використовуй indexes
         indexes = [
             models.Index(fields=['id', 'slug']),
-        ]
+    ]
 
     def __str__(self):
         return self.name
