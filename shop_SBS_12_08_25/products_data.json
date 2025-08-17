@@ -1,0 +1,95 @@
+[
+  {
+    "category": "Електроніка",
+    "products": [
+      {
+        "name": "Смартфон Samsung Galaxy S23",
+        "price": 32999.00,
+        "image": "products/images/samsung_s23.webp",
+        "description": "Потужний смартфон з камерою професійного рівня та екраном Dynamic AMOLED 2X."
+      },
+      {
+        "name": "Ноутбук Dell XPS 15",
+        "price": 54999.00,
+        "image": "products/images/dell_xps_15.webp",
+        "description": "Високопродуктивний ноутбук для творчих завдань з дисплеєм InfinityEdge."
+      },
+      {
+        "name": "Бездротові навушники Sony WH-1000XM5",
+        "price": 10999.00,
+        "image": "products/images/sony_wh1000xm5.webp",
+        "description": "Флагманські навушники з найкращим у своєму класі шумозаглушенням та чистим звуком."
+      },
+      {
+        "name": "Розумний годинник Apple Watch Series 8",
+        "price": 15999.00,
+        "image": "products/images/apple_watch8.webp",
+        "description": "Сучасний годинник з функціями моніторингу здоров'я та великим Retina-дисплеєм."
+      },
+      {
+        "name": "Ігрова консоль PlayStation 5",
+        "price": 24999.00,
+        "image": "products/images/ps5.webp",
+        "description": "Консоль нового покоління з надшвидким SSD та підтримкою 4K-геймінгу."
+      }
+    ]
+  },
+  {
+    "category": "Одяг",
+    "products": [
+      {
+        "name": "Джинси Levis 501 Original",
+        "price": 3500.00,
+        "image": "products/images/levis_501.webp",
+        "description": "Класичні джинси прямого крою, виготовлені з високоякісного деніму."
+      },
+      {
+        "name": "Футболка чорна, бавовна",
+        "price": 500.00,
+        "image": "products/images/black_tshirt.webp",
+        "description": "Проста та стильна футболка з натуральної бавовни, універсальна для будь-якого гардеробу."
+      },
+      {
+        "name": "Зимова куртка The North Face",
+        "price": 12000.00,
+        "image": "products/images/north_face_jacket.webp",
+        "description": "Тепла куртка, розроблена для екстремальних погодних умов, з водонепроникною тканиною."
+      }
+    ]
+  },
+  {
+    "category": "Книги",
+    "products": [
+      {
+        "name": "Дюна",
+        "price": 450.00,
+        "image": "products/images/duna_book.webp",
+        "description": "Епічний науково-фантастичний роман Френка Герберта про боротьбу за контроль над планетою-пустелею."
+      },
+      {
+        "name": "1984",
+        "price": 380.00,
+        "image": "products/images/1984_book.webp",
+        "description": "Антиутопічний роман Джорджа Орвелла про тоталітарний режим."
+      },
+      {
+        "name": "Володар перснів",
+        "price": 600.00,
+        "image": "products/images/lotr_book.webp",
+        "description": "Фентезі-епопея Дж. Р. Р. Толкіна про подорож гобіта Фродо для знищення Персня Всевладдя."
+      },
+      {
+        "name": "Гаррі Поттер і філософський камінь",
+        "price": 420.00,
+        "image": "products/images/harry_potter_book.webp",
+        "description": "Перша книга із серії романів про хлопчика-чарівника Гаррі Поттера."
+      },
+      {
+        "name": "Автостопом по Галактиці",
+        "price": 350.00,
+        "image": "products/images/hitchhikers_guide.webp",
+        "description": "Гумористичний науково-фантастичний роман Дугласа Адамса."
+      }
+    ]
+  }
+]
